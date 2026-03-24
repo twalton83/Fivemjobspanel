@@ -69,11 +69,11 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const defaultSettings: AppSettings = {
-  primaryColor: '#3b82f6',
-  secondaryColor: '#1e293b',
-  accentColor: '#8b5cf6',
+  primaryColor: '#7C5CBF',
+  secondaryColor: '#212126',
+  accentColor: '#5EBE8A',
   logo: '',
-  serverName: 'FiveM Admin Panel',
+  serverName: '8th Realm Scripts',
 };
 
 const initialJobs: Job[] = [
