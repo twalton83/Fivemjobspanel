@@ -47,6 +47,7 @@ export interface AppSettings {
   accentColor: string;
   logo: string;
   serverName: string;
+  theme: 'dark' | 'light';
 }
 
 interface AppContextType {
@@ -69,11 +70,12 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const defaultSettings: AppSettings = {
-  primaryColor: '#7C5CBF',
-  secondaryColor: '#212126',
-  accentColor: '#5EBE8A',
+  primaryColor: '#3B82F6',
+  secondaryColor: '#171728',
+  accentColor: '#A46BF5',
   logo: '',
   serverName: '8th Realm Scripts',
+  theme: 'dark',
 };
 
 const initialJobs: Job[] = [
@@ -186,6 +188,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     localStorage.setItem('fivem-settings', JSON.stringify(settings));
+    document.documentElement.setAttribute('data-theme', settings.theme);
   }, [settings]);
 
   const addLog = (action: string, description: string) => {

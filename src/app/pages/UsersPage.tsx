@@ -78,8 +78,8 @@ export const UsersPage = () => {
                 </div>
                 <button
                   onClick={() => openDialog(user.id)}
-                  className="h-8 px-3 rounded text-sm font-medium text-white flex items-center gap-1.5 transition-opacity opacity-70 group-hover:opacity-100"
-                  style={{ backgroundColor: settings.primaryColor }}
+                  className="h-8 px-3 rounded-md text-sm font-semibold tracking-wide uppercase flex items-center gap-1.5 transition-all duration-300 opacity-70 group-hover:opacity-100"
+                  style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}
                 >
                   <UserCog className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Manage</span>
@@ -97,7 +97,7 @@ export const UsersPage = () => {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-sm bg-surface border-edge text-clean rounded-lg shadow-2xl shadow-black/60">
+        <DialogContent className="max-w-sm text-clean">
           {selectedUser && <AssignForm userId={selectedUser} onClose={closeDialog} />}
         </DialogContent>
       </Dialog>
@@ -164,7 +164,7 @@ const AssignForm = ({ userId, onClose }: { userId: string; onClose: () => void }
 
       <div className="flex justify-end gap-2 pt-4 mt-4 border-t border-edge">
         <Button type="button" variant="ghost" onClick={onClose} className="h-9 px-4 text-sm text-subtle hover:text-clean rounded-md">Cancel</Button>
-        <Button type="submit" className="h-9 px-5 text-sm text-white rounded-md border-0" style={{ backgroundColor: settings.primaryColor }} disabled={!!(jobId && jobId !== 'unemployed' && !rankLevel)}>
+        <Button type="submit" className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }} disabled={!!(jobId && jobId !== 'unemployed' && !rankLevel)}>
           Save
         </Button>
       </div>

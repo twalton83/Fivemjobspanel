@@ -1,126 +1,131 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  8th Realm Scripts — Panel Theme
+  8th Realm Scripts — Brand Theme
+  "Where fantasy meets framework."
 
-  Neutral dark base (no blue/navy tint) with brand purple accent.
-
-  WCAG AA Contrast Ratios (all verified on #121214 base, L≈0.0055):
-  ─────────────────────────────────────────────────
-  TEXT ON BACKGROUND
-  clean    #EDEDF0   16.2:1  ✓ AAA   (primary text)
-  soft     #B8B6C8   7.8:1   ✓ AAA   (secondary text)
-  subtle   #928FA8   5.9:1   ✓ AA    (tertiary text)
-  dim      #7E7C96   4.7:1   ✓ AA    (lowest emphasis text)
-
-  ACCENT TEXT ON BACKGROUND
-  accent   #A88AD2   6.7:1   ✓ AA    (links, active labels)
-  money    #5EBE8A   8.0:1   ✓ AAA   (salary, success)
-  danger   #D4606E   5.0:1   ✓ AA    (errors, delete)
-  info     #7BAAD4   7.4:1   ✓ AAA   (update indicators)
-  rose     #D06098   5.0:1   ✓ AA    (secondary brand accent)
-
-  WHITE TEXT ON BUTTON BACKGROUNDS
-  #7C5CBF  4.6:1  ✓ AA   (primary button)
-  #D4606E  4.9:1  ✓ AA   (danger button)
-  ─────────────────────────────────────────────────
+  Aether Teal primary, Rift Violet secondary, void neutrals.
+  Rajdhani headings only, Inter for all UI text, JetBrains Mono for data.
 */
 
 :root {
   --font-size: 16px;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-heading: 'Rajdhani', 'Orbitron', 'Share Tech', sans-serif;
 
-  /* Neutral dark surfaces — no tint */
-  --background: #121214;
-  --foreground: #EDEDF0;
-  --card: #1A1A1E;
-  --card-foreground: #EDEDF0;
-  --popover: #1A1A1E;
-  --popover-foreground: #EDEDF0;
+  /* The Void — neutral surfaces */
+  --background: #08080E;
+  --foreground: #D4D4EC;
+  --card: #0F0F1A;
+  --card-foreground: #D4D4EC;
+  --popover: #171728;
+  --popover-foreground: #D4D4EC;
 
-  /* Brand purple from logo */
-  --primary: #7C5CBF;
-  --primary-foreground: #ffffff;
+  /* Realm Blue — primary energy */
+  --primary: #3B82F6;
+  --primary-foreground: #FFFFFF;
 
-  /* Neutral surfaces */
-  --secondary: #212126;
-  --secondary-foreground: #B8B6C8;
-  --muted: #212126;
-  --muted-foreground: #928FA8;
-  --accent: #28282E;
-  --accent-foreground: #EDEDF0;
+  /* Void surfaces */
+  --secondary: #171728;
+  --secondary-foreground: #D4D4EC;
+  --muted: #171728;
+  --muted-foreground: #8484A8;
+  --accent: #171728;
+  --accent-foreground: #D4D4EC;
 
-  --destructive: #D4606E;
+  /* Realm Rose — destructive */
+  --destructive: #E8467A;
   --destructive-foreground: #ffffff;
 
-  --border: #32323A;
-  --input: #32323A;
-  --input-background: #212126;
-  --switch-background: #32323A;
-  --ring: #7C5CBF;
+  --border: #252540;
+  --input: #252540;
+  --input-background: #08080E;
+  --switch-background: #252540;
+  --ring: #3B82F6;
 
   --font-weight-medium: 500;
   --font-weight-normal: 400;
 
-  --chart-1: #7C5CBF;
-  --chart-2: #5EBE8A;
-  --chart-3: #D06098;
-  --chart-4: #7BAAD4;
-  --chart-5: #A88AD2;
+  --chart-1: #3B82F6;
+  --chart-2: #A46BF5;
+  --chart-3: #E8467A;
+  --chart-4: #7BB3FF;
+  --chart-5: #6E3BBF;
 
   --radius: 0.375rem;
 
-  --sidebar: #161618;
-  --sidebar-foreground: #B8B6C8;
-  --sidebar-primary: #7C5CBF;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #212126;
-  --sidebar-accent-foreground: #EDEDF0;
-  --sidebar-border: #2A2A30;
-  --sidebar-ring: #7C5CBF;
+  /* Sidebar */
+  --sidebar: #0B0B14;
+  --sidebar-foreground: #D4D4EC;
+  --sidebar-primary: #3B82F6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #171728;
+  --sidebar-accent-foreground: #D4D4EC;
+  --sidebar-border: #252540;
+  --sidebar-ring: #3B82F6;
+
+  /* 8RS Glow system */
+  --glow-blue: 0 0 15px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05);
+  --glow-blue-sm: 0 0 8px rgba(59, 130, 246, 0.2);
+  --glow-purple: 0 0 15px rgba(164, 107, 245, 0.3), 0 0 30px rgba(164, 107, 245, 0.15);
+  --glow-rose: 0 0 15px rgba(232, 70, 122, 0.3), 0 0 30px rgba(232, 70, 122, 0.15);
 }
 
-.dark {
-  --background: #121214;
-  --foreground: #EDEDF0;
-  --card: #1A1A1E;
-  --card-foreground: #EDEDF0;
-  --popover: #1A1A1E;
-  --popover-foreground: #EDEDF0;
-  --primary: #7C5CBF;
-  --primary-foreground: #ffffff;
-  --secondary: #212126;
-  --secondary-foreground: #B8B6C8;
-  --muted: #212126;
-  --muted-foreground: #928FA8;
-  --accent: #28282E;
-  --accent-foreground: #EDEDF0;
-  --destructive: #D4606E;
-  --destructive-foreground: #ffffff;
-  --border: #32323A;
-  --input: #32323A;
-  --ring: #7C5CBF;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: #7C5CBF;
-  --chart-2: #5EBE8A;
-  --chart-3: #D06098;
-  --chart-4: #7BAAD4;
-  --chart-5: #A88AD2;
-  --sidebar: #161618;
-  --sidebar-foreground: #B8B6C8;
-  --sidebar-primary: #7C5CBF;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #212126;
-  --sidebar-accent-foreground: #EDEDF0;
-  --sidebar-border: #2A2A30;
-  --sidebar-ring: #7C5CBF;
+/* The Luminous — light mode overrides */
+[data-theme="light"] {
+  --background: #F8F9FC;
+  --foreground: #2D3154;
+  --card: #FFFFFF;
+  --card-foreground: #2D3154;
+  --popover: #FFFFFF;
+  --popover-foreground: #2D3154;
+
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #F1F3F9;
+  --secondary-foreground: #2D3154;
+  --muted: #F1F3F9;
+  --muted-foreground: #6B7194;
+  --accent: #F1F3F9;
+  --accent-foreground: #2D3154;
+
+  --destructive: #DB2777;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #D8DCE8;
+  --input: #D8DCE8;
+  --input-background: #FFFFFF;
+  --switch-background: #D8DCE8;
+  --ring: #2563EB;
+
+  --chart-1: #2563EB;
+  --chart-2: #7C3AED;
+  --chart-3: #DB2777;
+  --chart-4: #3B82F6;
+  --chart-5: #6D28D9;
+
+  --sidebar: #F1F3F9;
+  --sidebar-foreground: #2D3154;
+  --sidebar-primary: #2563EB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E8EAF2;
+  --sidebar-accent-foreground: #2D3154;
+  --sidebar-border: #D8DCE8;
+  --sidebar-ring: #2563EB;
+
+  /* Softer glows for light mode */
+  --glow-blue: 0 2px 12px rgba(37, 99, 235, 0.18), 0 0 24px rgba(37, 99, 235, 0.08);
+  --glow-blue-sm: 0 1px 6px rgba(37, 99, 235, 0.12);
+  --glow-purple: 0 2px 12px rgba(124, 58, 237, 0.18), 0 0 24px rgba(124, 58, 237, 0.08);
+  --glow-rose: 0 2px 12px rgba(219, 39, 119, 0.18), 0 0 24px rgba(219, 39, 119, 0.08);
 }
 
 @theme inline {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -160,20 +165,20 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Semantic tokens — ALL pass WCAG AA on base */
-  --color-base: #121214;
-  --color-surface: #1A1A1E;
-  --color-raised: #212126;
-  --color-edge: #32323A;
-  --color-clean: #EDEDF0;
-  --color-soft: #B8B6C8;
-  --color-subtle: #928FA8;
-  --color-dim: #7E7C96;
-  --color-accent-pop: #A88AD2;
-  --color-money: #5EBE8A;
-  --color-danger: #D4606E;
-  --color-info: #7BAAD4;
-  --color-rose: #D06098;
+  /* Semantic tokens */
+  --color-base: var(--background);
+  --color-surface: var(--card);
+  --color-raised: var(--secondary);
+  --color-edge: var(--border);
+  --color-clean: var(--foreground);
+  --color-soft: var(--foreground);
+  --color-subtle: var(--muted-foreground);
+  --color-dim: var(--muted-foreground);
+  --color-accent-pop: var(--chart-2);
+  --color-money: var(--chart-4);
+  --color-danger: var(--destructive);
+  --color-info: var(--primary);
+  --color-rose: var(--destructive);
 }
 
 @layer base {
@@ -184,6 +189,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-size: 1rem;
+    letter-spacing: 0.02em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -192,16 +199,74 @@
     font-size: var(--font-size);
   }
 
-  h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; }
-  h2 { font-size: 1.25rem; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; }
-  h3 { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
-  h4 { font-size: 0.95rem; font-weight: 500; line-height: 1.5; }
-  label { font-size: 0.875rem; font-weight: 500; line-height: 1.5; }
-  button { font-size: 0.875rem; font-weight: 500; line-height: 1.5; }
-  input { font-size: 0.875rem; font-weight: 400; line-height: 1.5; }
+  /* Rajdhani headings — uppercase, tracked, geometric. ONLY for section headings. */
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+  h2 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+  h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+  }
 
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #32323A; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #42424E; }
+  /* Inter for all UI text — buttons, labels, inputs */
+  label {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  button {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+  input {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--background); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+  /* Selection */
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 20%, transparent);
+    color: var(--foreground);
+  }
 }

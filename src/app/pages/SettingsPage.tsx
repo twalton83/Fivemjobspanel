@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ImageIcon, RotateCcw, Save } from 'lucide-react';
+import { ImageIcon, RotateCcw, Save, Sun, Moon } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -19,11 +19,12 @@ export const SettingsPage = () => {
 
   const reset = () => {
     const defaults = {
-      primaryColor: '#7C5CBF',
-      secondaryColor: '#212126',
-      accentColor: '#5EBE8A',
+      primaryColor: '#3B82F6',
+      secondaryColor: '#171728',
+      accentColor: '#A46BF5',
       logo: '',
       serverName: '8th Realm Scripts',
+      theme: 'dark' as const,
     };
     setLocal(defaults);
     updateSettings(defaults);
@@ -31,12 +32,12 @@ export const SettingsPage = () => {
   };
 
   const presets = [
-    { name: '8th Realm', primary: '#7C5CBF', accent: '#5EBE8A' },
-    { name: 'Magenta', primary: '#D06098', accent: '#A88AD2' },
-    { name: 'Ocean', primary: '#4A8AC2', accent: '#5EBE8A' },
+    { name: '8th Realm', primary: '#3B82F6', accent: '#A46BF5' },
+    { name: 'Rift Violet', primary: '#A46BF5', accent: '#6E3BBF' },
+    { name: 'Realm Rose', primary: '#E8467A', accent: '#A46BF5' },
+    { name: 'Ocean', primary: '#4A8AC2', accent: '#7BB3FF' },
     { name: 'Ember', primary: '#C76050', accent: '#D4A07A' },
-    { name: 'Frost', primary: '#5A96B8', accent: '#7BAAD4' },
-    { name: 'Emerald', primary: '#4A9E74', accent: '#8AB8A0' },
+    { name: 'Emerald', primary: '#4A9E74', accent: '#7BB3FF' },
   ];
 
   return (
@@ -50,7 +51,7 @@ export const SettingsPage = () => {
           <Button variant="outline" onClick={reset} className="h-9 px-4 text-sm bg-surface border-edge text-subtle hover:text-clean rounded-md">
             <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Reset
           </Button>
-          <Button onClick={save} disabled={!dirty} className="h-9 px-4 text-sm text-white rounded-md border-0 disabled:opacity-40" style={dirty ? { backgroundColor: local.primaryColor } : { backgroundColor: '#32323A' }}>
+          <Button onClick={save} disabled={!dirty} className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0 disabled:opacity-40" style={dirty ? { backgroundColor: local.primaryColor, color: '#FFFFFF' } : { backgroundColor: '#2A2A3E' }}>
             <Save className="w-3.5 h-3.5 mr-1.5" /> Save
           </Button>
         </div>
@@ -85,6 +86,34 @@ export const SettingsPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Theme */}
+        <section>
+          <h3 className="text-clean mb-4">Theme</h3>
+          <div className="flex gap-3">
+            {([
+              { value: 'dark' as const, label: 'Dark', icon: Moon, desc: 'The Void' },
+              { value: 'light' as const, label: 'Light', icon: Sun, desc: 'The Luminous' },
+            ]).map(({ value, label, icon: Icon, desc }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => set('theme', value)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-md border transition-colors ${
+                  local.theme === value
+                    ? 'border-primary bg-primary/10 text-foreground'
+                    : 'border-edge bg-surface text-subtle hover:border-dim'
+                }`}
+              >
+                <Icon className="w-4.5 h-4.5" />
+                <div className="text-left">
+                  <p className="text-sm font-medium">{label}</p>
+                  <p className="text-xs text-subtle">{desc}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </section>
 
@@ -132,8 +161,8 @@ export const SettingsPage = () => {
           <div className="mt-6 p-6 rounded-md border border-edge bg-base">
             <p className="text-xs text-dim mb-3 uppercase tracking-wider">Preview</p>
             <div className="flex flex-wrap gap-3 items-center">
-              <Button className="h-9 px-4 text-sm text-white rounded-md border-0" style={{ backgroundColor: local.primaryColor }}>Primary</Button>
-              <Button className="h-9 px-4 text-sm text-white rounded-md border-0" style={{ backgroundColor: local.accentColor }}>Accent</Button>
+              <Button className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: local.primaryColor, color: '#FFFFFF' }}>Primary</Button>
+              <Button className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: local.accentColor, color: '#FFFFFF' }}>Accent</Button>
               <Button variant="outline" className="h-9 px-4 text-sm rounded-md bg-transparent border" style={{ borderColor: local.primaryColor, color: local.primaryColor }}>Outline</Button>
               <span className="text-sm font-mono px-2.5 py-1 rounded border" style={{ backgroundColor: `${local.primaryColor}15`, color: local.primaryColor, borderColor: `${local.primaryColor}30` }}>badge</span>
             </div>

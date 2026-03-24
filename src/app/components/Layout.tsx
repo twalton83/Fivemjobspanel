@@ -18,10 +18,10 @@ export const Layout = () => {
   ];
 
   return (
-    <div className="h-screen flex bg-base text-clean font-sans">
+    <div className="h-screen flex bg-base text-soft font-sans">
       {/* Sidebar */}
       <aside className={cn(
-        'h-screen flex flex-col border-r border-edge bg-sidebar transition-[width] duration-200 shrink-0',
+        'h-screen flex flex-col border-r border-edge bg-sidebar transition-[width] duration-300 ease-in-out shrink-0',
         collapsed ? 'w-[3.5rem]' : 'w-[14.5rem]'
       )}>
         {/* Brand */}
@@ -32,12 +32,15 @@ export const Layout = () => {
           {settings.logo ? (
             <img src={settings.logo} alt="" className="w-7 h-7 object-contain shrink-0 rounded" />
           ) : (
-            <div className="w-8 h-8 rounded bg-raised flex items-center justify-center shrink-0 text-xs font-bold text-soft tracking-tight">
+            <div
+              className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 text-xs font-heading font-bold tracking-wider"
+              style={{ backgroundColor: `${settings.primaryColor}20`, color: settings.primaryColor }}
+            >
               8R
             </div>
           )}
           {!collapsed && (
-            <span className="text-sm font-semibold text-clean truncate">{settings.serverName}</span>
+            <span className="text-sm font-heading font-semibold text-clean truncate tracking-wider uppercase">{settings.serverName}</span>
           )}
         </div>
 
@@ -50,14 +53,20 @@ export const Layout = () => {
             return (
               <Link key={item.path} to={item.path}>
                 <div className={cn(
-                  'flex items-center gap-2.5 rounded-md transition-colors duration-100 mb-0.5 relative',
+                  'flex items-center gap-2.5 rounded-md transition-all duration-300 ease-in-out mb-0.5 relative',
                   collapsed ? 'h-10 w-10 justify-center mx-auto' : 'h-10 px-3',
                   active
                     ? 'bg-raised text-clean'
                     : 'text-subtle hover:text-soft hover:bg-raised/60'
                 )}>
                   {active && (
-                    <div className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r" style={{ backgroundColor: settings.primaryColor }} />
+                    <div
+                      className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r"
+                      style={{
+                        backgroundColor: settings.primaryColor,
+                        boxShadow: `0 0 8px ${settings.primaryColor}40`,
+                      }}
+                    />
                   )}
                   <Icon className="w-4.5 h-4.5 shrink-0" style={active ? { color: settings.primaryColor } : {}} />
                   {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
@@ -67,16 +76,19 @@ export const Layout = () => {
           })}
         </nav>
 
-        {/* Collapse toggle + user */}
+        {/* User + collapse */}
         <div className="border-t border-edge shrink-0">
           {!collapsed && (
             <div className="px-3 py-3 flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded bg-raised flex items-center justify-center text-xs font-bold text-dim shrink-0">
+              <div
+                className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-heading font-bold shrink-0"
+                style={{ backgroundColor: `${settings.primaryColor}15`, color: settings.primaryColor }}
+              >
                 AD
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-soft truncate">Administrator</p>
-                <p className="text-xs text-dim flex items-center gap-1">
+                <p className="text-xs text-subtle flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-money inline-block" />
                   Online
                 </p>
@@ -86,7 +98,7 @@ export const Layout = () => {
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              'w-full flex items-center justify-center h-10 text-dim hover:text-subtle transition-colors',
+              'w-full flex items-center justify-center h-10 text-subtle hover:text-soft transition-colors duration-300',
               !collapsed && 'border-t border-edge'
             )}
           >

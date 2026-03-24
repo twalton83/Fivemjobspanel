@@ -39,11 +39,11 @@ export const JobsPage = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => openDialog()} className="h-9 px-4 text-sm font-medium rounded-md border-0 text-white" style={{ backgroundColor: settings.primaryColor }}>
+            <Button onClick={() => openDialog()} className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
               <Plus className="w-4 h-4 mr-1.5" /> New Job
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-surface border-edge text-clean rounded-lg shadow-2xl shadow-black/60">
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto text-clean">
             <JobForm job={editingJob} onClose={closeDialog} />
           </DialogContent>
         </Dialog>
@@ -93,7 +93,7 @@ export const JobsPage = () => {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent className="bg-surface border-edge text-clean rounded-lg">
+                      <AlertDialogContent className="text-clean">
                         <AlertDialogHeader>
                           <AlertDialogTitle>Delete {job.label}?</AlertDialogTitle>
                           <AlertDialogDescription className="text-subtle">This permanently removes this job and all ranks.</AlertDialogDescription>
@@ -140,7 +140,7 @@ export const JobsPage = () => {
         {jobs.length === 0 && (
           <div className="text-center py-20">
             <p className="text-subtle mb-4">No jobs yet</p>
-            <Button onClick={() => openDialog()} className="h-9 px-5 text-sm text-white rounded-md border-0" style={{ backgroundColor: settings.primaryColor }}>
+            <Button onClick={() => openDialog()} className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
               <Plus className="w-4 h-4 mr-1.5" /> Create First Job
             </Button>
           </div>
@@ -239,7 +239,7 @@ const JobForm = ({ job, onClose }: { job: Job | null; onClose: () => void }) => 
 
         <div className="flex justify-end gap-2 pt-3 border-t border-edge">
           <Button type="button" variant="ghost" onClick={onClose} className="h-9 px-4 text-sm text-subtle hover:text-clean rounded-md">Cancel</Button>
-          <Button type="submit" className="h-9 px-5 text-sm text-white rounded-md border-0" style={{ backgroundColor: settings.primaryColor }}>
+          <Button type="submit" className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
             {job ? 'Save' : 'Create'}
           </Button>
         </div>

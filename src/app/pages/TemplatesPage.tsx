@@ -27,11 +27,11 @@ export const TemplatesPage = () => {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => openDialog()} className="h-9 px-4 text-sm font-medium rounded-md border-0 text-white" style={{ backgroundColor: settings.primaryColor }}>
+            <Button onClick={() => openDialog()} className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
               <Plus className="w-4 h-4 mr-1.5" /> New Template
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-surface border-edge text-clean rounded-lg shadow-2xl shadow-black/60">
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto text-clean">
             <TemplateForm template={editing} onClose={closeDialog} />
           </DialogContent>
         </Dialog>
@@ -56,7 +56,7 @@ export const TemplatesPage = () => {
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-surface border-edge text-clean rounded-lg">
+                    <AlertDialogContent className="text-clean">
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete {t.name}?</AlertDialogTitle>
                         <AlertDialogDescription className="text-subtle">Existing jobs won't be affected.</AlertDialogDescription>
@@ -97,7 +97,7 @@ export const TemplatesPage = () => {
         {templates.length === 0 && (
           <div className="md:col-span-2 lg:col-span-3 text-center py-20">
             <p className="text-subtle mb-4">No templates yet</p>
-            <Button onClick={() => openDialog()} className="h-9 px-5 text-sm text-white rounded-md border-0" style={{ backgroundColor: settings.primaryColor }}>
+            <Button onClick={() => openDialog()} className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
               <Plus className="w-4 h-4 mr-1.5" /> Create Template
             </Button>
           </div>
@@ -171,7 +171,7 @@ const TemplateForm = ({ template, onClose }: { template: JobTemplate | null; onC
 
         <div className="flex justify-end gap-2 pt-3 border-t border-edge">
           <Button type="button" variant="ghost" onClick={onClose} className="h-9 px-4 text-sm text-subtle hover:text-clean rounded-md">Cancel</Button>
-          <Button type="submit" className="h-9 px-5 text-sm text-white rounded-md border-0" style={{ backgroundColor: settings.primaryColor }}>
+          <Button type="submit" className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
             {template ? 'Save' : 'Create'}
           </Button>
         </div>
