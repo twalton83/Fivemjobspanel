@@ -1,11 +1,10 @@
+# FiveM Jobs Panel
 
-  # Admin panel for FiveM
+Admin panel for managing jobs, ranks, templates, and players.
 
-  This is a code bundle for Admin panel for FiveM. The original project is available at https://www.figma.com/design/Gnv7bqLWNPUqWax1HxuXRH/Admin-panel-for-FiveM.
+## Setup
 
-  ## Running the code
-
-  Run `npm i` to install the dependencies.
-
-  Run `npm run dev` to start the development server.
-  
+```
+npm i
+npm run dev
+```
