@@ -5,7 +5,9 @@ import { fetchNui, onNuiEvent, isEnvBrowser } from "./utils/nui";
 
 const root = document.getElementById("root")!;
 
-if (!isEnvBrowser) {
+if (isEnvBrowser) {
+  root.style.display = "block";
+} else {
   root.style.display = "none";
 
   onNuiEvent<boolean>("setVisible", (visible) => {
