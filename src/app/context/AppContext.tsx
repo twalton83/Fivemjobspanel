@@ -73,7 +73,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const defaultSettings: AppSettings = {
   primaryColor: '#3B82F6',
-  secondaryColor: '#171728',
+  secondaryColor: '#12152A',
   accentColor: '#A46BF5',
   logo: '',
   serverName: 'InDaLou RP',
@@ -144,7 +144,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [settings, setSettings] = useState<AppSettings>(() => {
     const saved = localStorage.getItem('fivem-settings');
-    return saved ? JSON.parse(saved) : defaultSettings;
+    return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
   });
 
   useEffect(() => {

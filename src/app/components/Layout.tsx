@@ -18,7 +18,7 @@ export const Layout = () => {
   ];
 
   return (
-    <div className="w-[60vw] max-w-[1100px] mx-auto mt-[8vh] flex bg-base text-soft font-sans rounded-xl overflow-hidden shadow-2xl" style={{ height: '75vh' }}>
+    <div className="panel-frame w-[60vw] max-w-[1100px] mx-auto mt-[8vh] flex bg-base text-soft font-sans overflow-hidden" style={{ height: '75vh', borderRadius: 'var(--panel-radius)', boxShadow: 'var(--panel-shadow)' }}>
       {/* Sidebar */}
       <aside className={cn(
         'h-full flex flex-col border-r border-edge bg-sidebar transition-[width] duration-300 ease-in-out shrink-0',

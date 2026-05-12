@@ -1,47 +1,46 @@
 @custom-variant dark (&:is(.dark *));
 
-/*
-  8th Realm Scripts — Brand Theme
-  "Where fantasy meets framework."
-
-  Aether Teal primary, Rift Violet secondary, void neutrals.
-  Rajdhani headings only, Inter for all UI text, JetBrains Mono for data.
-*/
+/* ================================================================
+   8th Realm Scripts — GRIDLINE Design System
+   Precision Neon Architecture
+   Realm Blue primary, Rift Violet accent, void neutrals.
+   "Where fantasy meets framework."
+   ================================================================ */
 
 :root {
   --font-size: 16px;
-  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Exo 2', 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-heading: 'Rajdhani', 'Orbitron', 'Share Tech', sans-serif;
+  --font-heading: 'Orbitron', 'Share Tech', sans-serif;
 
-  /* The Void — neutral surfaces */
-  --background: #08080E;
-  --foreground: #D4D4EC;
-  --card: #0F0F1A;
-  --card-foreground: #D4D4EC;
-  --popover: #171728;
-  --popover-foreground: #D4D4EC;
+  /* The Void — deep navy surfaces */
+  --background: #06070D;
+  --foreground: #D0D8E8;
+  --card: #0C0E18;
+  --card-foreground: #D0D8E8;
+  --popover: #10132A;
+  --popover-foreground: #D0D8E8;
 
   /* Realm Blue — primary energy */
   --primary: #3B82F6;
   --primary-foreground: #FFFFFF;
 
   /* Void surfaces */
-  --secondary: #171728;
-  --secondary-foreground: #D4D4EC;
-  --muted: #171728;
-  --muted-foreground: #8484A8;
-  --accent: #171728;
-  --accent-foreground: #D4D4EC;
+  --secondary: #12152A;
+  --secondary-foreground: #D0D8E8;
+  --muted: #12152A;
+  --muted-foreground: #8B9BC0;
+  --accent: #161A30;
+  --accent-foreground: #D0D8E8;
 
   /* Realm Rose — destructive */
   --destructive: #E8467A;
-  --destructive-foreground: #ffffff;
+  --destructive-foreground: #FFFFFF;
 
-  --border: #252540;
-  --input: #252540;
-  --input-background: #08080E;
-  --switch-background: #252540;
+  --border: #1E2248;
+  --input: #1E2248;
+  --input-background: #080A14;
+  --switch-background: #1E2248;
   --ring: #3B82F6;
 
   --font-weight-medium: 500;
@@ -53,51 +52,61 @@
   --chart-4: #7BB3FF;
   --chart-5: #6E3BBF;
 
-  --radius: 0.375rem;
+  --radius: 2px;
 
   /* Sidebar */
-  --sidebar: #0B0B14;
-  --sidebar-foreground: #D4D4EC;
+  --sidebar: #080A12;
+  --sidebar-foreground: #D0D8E8;
   --sidebar-primary: #3B82F6;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #171728;
-  --sidebar-accent-foreground: #D4D4EC;
-  --sidebar-border: #252540;
+  --sidebar-accent: #12152A;
+  --sidebar-accent-foreground: #D0D8E8;
+  --sidebar-border: #1E2248;
   --sidebar-ring: #3B82F6;
 
-  /* 8RS Glow system */
-  --glow-blue: 0 0 15px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05);
-  --glow-blue-sm: 0 0 8px rgba(59, 130, 246, 0.2);
-  --glow-purple: 0 0 15px rgba(164, 107, 245, 0.3), 0 0 30px rgba(164, 107, 245, 0.15);
-  --glow-rose: 0 0 15px rgba(232, 70, 122, 0.3), 0 0 30px rgba(232, 70, 122, 0.15);
+  /* Glow system */
+  --glow-blue: 0 0 12px rgba(59, 130, 246, 0.25), 0 0 30px rgba(59, 130, 246, 0.1), 0 0 60px rgba(59, 130, 246, 0.04);
+  --glow-blue-sm: 0 0 6px rgba(59, 130, 246, 0.3);
+  --glow-purple: 0 0 12px rgba(164, 107, 245, 0.25), 0 0 25px rgba(164, 107, 245, 0.1);
+  --glow-rose: 0 0 12px rgba(232, 70, 122, 0.3), 0 0 25px rgba(232, 70, 122, 0.12);
+
+  /* Component-level tokens */
+  --dialog-bg: rgba(12, 14, 24, 0.92);
+  --dialog-border: rgba(59, 130, 246, 0.2);
+  --dialog-blur: 4px;
+  --card-hover-border: rgba(59, 130, 246, 0.3);
+  --card-hover-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1), 0 0 16px rgba(59, 130, 246, 0.08);
+  --panel-radius: 2px;
+  --panel-shadow: 0 0 0 1px #1E2248, 0 0 60px rgba(59, 130, 246, 0.04);
+  --overlay-bg: rgba(0, 0, 0, 0.60);
 }
 
-/* The Luminous — light mode overrides */
+/* Light mode */
 [data-theme="light"] {
-  --background: #F8F9FC;
-  --foreground: #2D3154;
+  --background: #F4F6FB;
+  --foreground: #1A2040;
   --card: #FFFFFF;
-  --card-foreground: #2D3154;
+  --card-foreground: #1A2040;
   --popover: #FFFFFF;
-  --popover-foreground: #2D3154;
+  --popover-foreground: #1A2040;
 
   --primary: #2563EB;
   --primary-foreground: #FFFFFF;
 
-  --secondary: #F1F3F9;
-  --secondary-foreground: #2D3154;
-  --muted: #F1F3F9;
-  --muted-foreground: #6B7194;
-  --accent: #F1F3F9;
-  --accent-foreground: #2D3154;
+  --secondary: #EDF0F8;
+  --secondary-foreground: #1A2040;
+  --muted: #EDF0F8;
+  --muted-foreground: #5A6480;
+  --accent: #E4E8F4;
+  --accent-foreground: #1A2040;
 
   --destructive: #DB2777;
   --destructive-foreground: #FFFFFF;
 
-  --border: #D8DCE8;
-  --input: #D8DCE8;
+  --border: #D0D8E8;
+  --input: #D0D8E8;
   --input-background: #FFFFFF;
-  --switch-background: #D8DCE8;
+  --switch-background: #D0D8E8;
   --ring: #2563EB;
 
   --chart-1: #2563EB;
@@ -106,22 +115,30 @@
   --chart-4: #3B82F6;
   --chart-5: #6D28D9;
 
-  --sidebar: #F1F3F9;
-  --sidebar-foreground: #2D3154;
+  --sidebar: #EDF0F8;
+  --sidebar-foreground: #1A2040;
   --sidebar-primary: #2563EB;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #E8EAF2;
-  --sidebar-accent-foreground: #2D3154;
-  --sidebar-border: #D8DCE8;
+  --sidebar-accent: #E4E8F4;
+  --sidebar-accent-foreground: #1A2040;
+  --sidebar-border: #D0D8E8;
   --sidebar-ring: #2563EB;
 
-  /* Softer glows for light mode */
-  --glow-blue: 0 2px 12px rgba(37, 99, 235, 0.18), 0 0 24px rgba(37, 99, 235, 0.08);
+  --glow-blue: 0 2px 12px rgba(37, 99, 235, 0.18);
   --glow-blue-sm: 0 1px 6px rgba(37, 99, 235, 0.12);
-  --glow-purple: 0 2px 12px rgba(124, 58, 237, 0.18), 0 0 24px rgba(124, 58, 237, 0.08);
-  --glow-rose: 0 2px 12px rgba(219, 39, 119, 0.18), 0 0 24px rgba(219, 39, 119, 0.08);
+  --glow-purple: 0 2px 12px rgba(124, 58, 237, 0.18);
+  --glow-rose: 0 2px 12px rgba(219, 39, 119, 0.18);
+
+  --dialog-bg: rgba(255, 255, 255, 0.95);
+  --dialog-border: rgba(37, 99, 235, 0.2);
+  --card-hover-border: rgba(37, 99, 235, 0.3);
+  --card-hover-shadow: 0 0 8px rgba(37, 99, 235, 0.08);
+  --panel-shadow: 0 0 0 1px #D0D8E8, 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
+/* ----------------------------------------------------------------
+   @theme inline — Maps CSS vars to Tailwind utilities
+   ---------------------------------------------------------------- */
 @theme inline {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -181,6 +198,9 @@
   --color-rose: var(--destructive);
 }
 
+/* ----------------------------------------------------------------
+   Base layer
+   ---------------------------------------------------------------- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -210,13 +230,13 @@
     font-size: var(--font-size);
   }
 
-  /* Rajdhani headings — uppercase, tracked, geometric. ONLY for section headings. */
+  /* Headings — Orbitron, uppercase, wide-tracked */
   h1 {
     font-family: var(--font-heading);
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.2;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--foreground);
   }
@@ -225,7 +245,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.3;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--foreground);
   }
@@ -234,7 +254,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     line-height: 1.35;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--foreground);
   }
@@ -243,16 +263,16 @@
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.4;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
   }
 
-  /* Inter for all UI text — buttons, labels, inputs */
+  /* UI text — Exo 2 */
   label {
     font-family: var(--font-sans);
     font-size: 0.82rem;
     font-weight: 600;
     line-height: 1.5;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   button {
@@ -272,12 +292,53 @@
   /* Scrollbars */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--background); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 0; }
   ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
   /* Selection */
   ::selection {
     background: color-mix(in srgb, var(--primary) 20%, transparent);
     color: var(--foreground);
+  }
+
+  /* ============================================================
+     GRIDLINE signature effects
+     ============================================================ */
+
+  /* Panel frame — 1px border */
+  .panel-frame {
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  /* Top gradient power bar */
+  .panel-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+    z-index: 51;
+  }
+
+  /* Corner brackets */
+  .panel-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 51;
+    border: 1px solid transparent;
+    background:
+      linear-gradient(to right, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 0 0 / 9px 1px,
+      linear-gradient(to bottom, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 0 0 / 1px 9px,
+      linear-gradient(to left, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 100% 0 / 9px 1px,
+      linear-gradient(to bottom, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 100% 0 / 1px 9px,
+      linear-gradient(to right, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 0 100% / 9px 1px,
+      linear-gradient(to top, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 0 100% / 1px 9px,
+      linear-gradient(to left, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 100% 100% / 9px 1px,
+      linear-gradient(to top, rgba(59, 130, 246, 0.4) 8px, transparent 8px) no-repeat 100% 100% / 1px 9px;
   }
 }

@@ -20,7 +20,7 @@ export const SettingsPage = () => {
   const reset = () => {
     const defaults = {
       primaryColor: '#3B82F6',
-      secondaryColor: '#171728',
+      secondaryColor: '#12152A',
       accentColor: '#A46BF5',
       logo: '',
       serverName: '8th Realm Scripts',
@@ -36,8 +36,6 @@ export const SettingsPage = () => {
     { name: 'Rift Violet', primary: '#A46BF5', accent: '#6E3BBF' },
     { name: 'Realm Rose', primary: '#E8467A', accent: '#A46BF5' },
     { name: 'Ocean', primary: '#4A8AC2', accent: '#7BB3FF' },
-    { name: 'Ember', primary: '#C76050', accent: '#D4A07A' },
-    { name: 'Emerald', primary: '#4A9E74', accent: '#7BB3FF' },
   ];
 
   return (
@@ -127,10 +125,11 @@ export const SettingsPage = () => {
                 key={p.name}
                 type="button"
                 onClick={() => { set('primaryColor', p.primary); set('accentColor', p.accent); }}
-                className="flex items-center gap-2 px-3 py-2 rounded-md bg-surface border border-edge hover:border-dim transition-colors text-sm text-subtle"
+                className="flex items-center gap-2 px-3 py-2 bg-surface border border-edge hover:border-dim transition-colors text-sm text-subtle"
+                style={{ borderRadius: 'var(--radius-md)' }}
               >
-                <span className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: p.primary }} />
-                <span className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: p.accent }} />
+                <span className="w-3.5 h-3.5" style={{ backgroundColor: p.primary, borderRadius: 'var(--radius-sm)' }} />
+                <span className="w-3.5 h-3.5" style={{ backgroundColor: p.accent, borderRadius: 'var(--radius-sm)' }} />
                 {p.name}
               </button>
             ))}
