@@ -71,6 +71,40 @@ AddEventHandler('playerDropped', function()
     lastMutateAt[source] = nil
 end)
 
+-- ── Discord webhook ───────────────────────────────────────────────────────
+local ACTION_COLORS = {
+    CREATE_JOB      = 3066993,  -- green
+    UPDATE_JOB      = 3447003,  -- blue
+    DELETE_JOB      = 15158332, -- red
+    UPDATE_USER_JOB = 16776960, -- yellow
+}
+
+local function sendDiscord(adminName, action, description)
+    local url = Config.DiscordWebhook
+    if not url or url == '' then return end
+
+    PerformHttpRequest(url, function() end, 'POST', json.encode({
+        embeds = {{
+            title = action:gsub('_', ' '),
+            description = description,
+            color = ACTION_COLORS[action] or 3447003,
+            footer = { text = 'Admin: ' .. adminName },
+            timestamp = os.date('!%Y-%m-%dT%H:%M:%SZ'),
+        }}
+    }), { ['Content-Type'] = 'application/json' })
+end
+
+-- ── FiveManage logging ───────────────────────────────────────────────────
+local function sendFiveManage(adminName, action, description)
+    local key = Config.FiveManageKey
+    if not key or key == '' then return end
+
+    PerformHttpRequest('https://api.fivemanage.com/api/logs', function() end, 'POST', json.encode({
+        message = action .. ': ' .. description,
+        metadata = { admin = adminName, action = action },
+    }), { ['Content-Type'] = 'application/json', ['Authorization'] = key })
+end
+
 -- ── Logging ───────────────────────────────────────────────────────────────
 local function addLog(source, action, description)
     local xPlayer = ESX.GetPlayerFromId(source)
@@ -84,6 +118,8 @@ local function addLog(source, action, description)
         action,
         description
     })
+    sendDiscord(adminName, action, description)
+    sendFiveManage(adminName, action, description)
 end
 
 -- ── Formatters ────────────────────────────────────────────────────────────
