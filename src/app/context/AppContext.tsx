@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { fetchNui, onNuiEvent, isEnvBrowser } from '../../utils/nui';
 
 export interface Rank {
   id: string;
@@ -74,16 +75,13 @@ const defaultSettings: AppSettings = {
   secondaryColor: '#171728',
   accentColor: '#A46BF5',
   logo: '',
-  serverName: '8th Realm Scripts',
+  serverName: 'InDaLou RP',
   theme: 'dark',
 };
 
-const initialJobs: Job[] = [
+const devJobs: Job[] = [
   {
-    id: '1',
-    name: 'police',
-    label: 'Los Santos Police Department',
-    description: 'Law enforcement agency',
+    id: '1', name: 'police', label: 'Los Santos Police Department', description: 'Law enforcement agency',
     ranks: [
       { id: '1-1', name: 'Cadet', level: 0, salary: 1200 },
       { id: '1-2', name: 'Officer', level: 1, salary: 1800 },
@@ -92,30 +90,23 @@ const initialJobs: Job[] = [
       { id: '1-5', name: 'Captain', level: 4, salary: 3800 },
       { id: '1-6', name: 'Chief', level: 5, salary: 4500 },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   },
   {
-    id: '2',
-    name: 'mechanic',
-    label: 'Mechanic Shop',
-    description: 'Vehicle repair and maintenance',
+    id: '2', name: 'mechanic', label: 'Mechanic Shop', description: 'Vehicle repair and maintenance',
     ranks: [
       { id: '2-1', name: 'Apprentice', level: 0, salary: 800 },
       { id: '2-2', name: 'Mechanic', level: 1, salary: 1400 },
       { id: '2-3', name: 'Lead Mechanic', level: 2, salary: 2000 },
       { id: '2-4', name: 'Shop Manager', level: 3, salary: 2600 },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   },
 ];
 
-const initialTemplates: JobTemplate[] = [
+const devTemplates: JobTemplate[] = [
   {
-    id: '1',
-    name: 'Emergency Services',
-    description: 'Template for emergency service jobs',
+    id: '1', name: 'Emergency Services', description: 'Template for emergency service jobs',
     defaultRanks: [
       { id: 't1-1', name: 'Trainee', level: 0, salary: 1000 },
       { id: 't1-2', name: 'Responder', level: 1, salary: 1600 },
@@ -125,9 +116,7 @@ const initialTemplates: JobTemplate[] = [
     ],
   },
   {
-    id: '2',
-    name: 'Business',
-    description: 'Template for business jobs',
+    id: '2', name: 'Business', description: 'Template for business jobs',
     defaultRanks: [
       { id: 't2-1', name: 'Employee', level: 0, salary: 900 },
       { id: 't2-2', name: 'Senior Employee', level: 1, salary: 1500 },
@@ -137,7 +126,7 @@ const initialTemplates: JobTemplate[] = [
   },
 ];
 
-const initialUsers: User[] = [
+const devUsers: User[] = [
   { id: '1', name: 'John Smith', identifier: 'license:abc123', jobId: '1', jobLabel: 'Los Santos Police Department', rankLevel: 2 },
   { id: '2', name: 'Jane Doe', identifier: 'license:def456', jobId: '2', jobLabel: 'Mechanic Shop', rankLevel: 1 },
   { id: '3', name: 'Mike Johnson', identifier: 'license:ghi789', jobId: '1', jobLabel: 'Los Santos Police Department', rankLevel: 0 },
@@ -145,46 +134,29 @@ const initialUsers: User[] = [
 ];
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [jobs, setJobs] = useState<Job[]>(() => {
-    const saved = localStorage.getItem('fivem-jobs');
-    return saved ? JSON.parse(saved) : initialJobs;
-  });
-
+  const [jobs, setJobs] = useState<Job[]>(isEnvBrowser ? devJobs : []);
   const [templates, setTemplates] = useState<JobTemplate[]>(() => {
     const saved = localStorage.getItem('fivem-templates');
-    return saved ? JSON.parse(saved) : initialTemplates;
+    return saved ? JSON.parse(saved) : devTemplates;
   });
-
-  const [users, setUsers] = useState<User[]>(() => {
-    const saved = localStorage.getItem('fivem-users');
-    return saved ? JSON.parse(saved) : initialUsers;
-  });
-
-  const [logs, setLogs] = useState<ActivityLog[]>(() => {
-    const saved = localStorage.getItem('fivem-logs');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  const [users, setUsers] = useState<User[]>(isEnvBrowser ? devUsers : []);
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [settings, setSettings] = useState<AppSettings>(() => {
     const saved = localStorage.getItem('fivem-settings');
     return saved ? JSON.parse(saved) : defaultSettings;
   });
 
   useEffect(() => {
-    localStorage.setItem('fivem-jobs', JSON.stringify(jobs));
-  }, [jobs]);
+    return onNuiEvent<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('loadData', (data) => {
+      if (data.jobs) setJobs(data.jobs);
+      if (data.players) setUsers(data.players);
+      if (data.logs) setLogs(data.logs);
+    });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('fivem-templates', JSON.stringify(templates));
   }, [templates]);
-
-  useEffect(() => {
-    localStorage.setItem('fivem-users', JSON.stringify(users));
-  }, [users]);
-
-  useEffect(() => {
-    localStorage.setItem('fivem-logs', JSON.stringify(logs));
-  }, [logs]);
 
   useEffect(() => {
     localStorage.setItem('fivem-settings', JSON.stringify(settings));
@@ -202,86 +174,100 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setLogs((prev) => [log, ...prev]);
   };
 
-  const addJob = (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newJob: Job = {
-      ...job,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  const addJob = async (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => {
+    if (!isEnvBrowser) {
+      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('createJob', {
+        name: job.name,
+        label: job.label,
+        ranks: job.ranks,
+      });
+      if (result.success && result.jobs) {
+        setJobs(result.jobs);
+      }
+      return;
+    }
+    const newJob: Job = { ...job, id: Date.now().toString(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
     setJobs((prev) => [...prev, newJob]);
     addLog('CREATE_JOB', `Created job: ${job.label}`);
   };
 
-  const updateJob = (id: string, jobUpdate: Partial<Job>) => {
-    setJobs((prev) =>
-      prev.map((job) =>
-        job.id === id ? { ...job, ...jobUpdate, updatedAt: new Date().toISOString() } : job
-      )
-    );
-    const job = jobs.find((j) => j.id === id);
-    if (job) {
-      addLog('UPDATE_JOB', `Updated job: ${job.label}`);
+  const updateJob = async (id: string, jobUpdate: Partial<Job>) => {
+    if (!isEnvBrowser) {
+      const current = jobs.find((j) => j.id === id);
+      if (!current) return;
+      const merged = { ...current, ...jobUpdate };
+      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('updateJob', {
+        name: merged.name,
+        label: merged.label,
+        ranks: merged.ranks,
+      });
+      if (result.success && result.jobs) {
+        setJobs(result.jobs);
+      }
+      return;
     }
+    setJobs((prev) => prev.map((job) => job.id === id ? { ...job, ...jobUpdate, updatedAt: new Date().toISOString() } : job));
+    const job = jobs.find((j) => j.id === id);
+    if (job) addLog('UPDATE_JOB', `Updated job: ${job.label}`);
   };
 
-  const deleteJob = (id: string) => {
+  const deleteJob = async (id: string) => {
     const job = jobs.find((j) => j.id === id);
-    setJobs((prev) => prev.filter((job) => job.id !== id));
-    // Update users with this job to unemployed
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.jobId === id ? { ...user, jobId: null, jobLabel: 'Unemployed', rankLevel: null } : user
-      )
-    );
-    if (job) {
-      addLog('DELETE_JOB', `Deleted job: ${job.label}`);
+    if (!isEnvBrowser) {
+      if (!job) return;
+      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('deleteJob', { name: job.name });
+      if (result.success && result.jobs) {
+        setJobs(result.jobs);
+        const refreshed = await fetchNui<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('refreshData');
+        if (refreshed.players) setUsers(refreshed.players);
+        if (refreshed.logs) setLogs(refreshed.logs);
+      }
+      return;
     }
+    setJobs((prev) => prev.filter((j) => j.id !== id));
+    setUsers((prev) => prev.map((user) => user.jobId === id ? { ...user, jobId: null, jobLabel: 'Unemployed', rankLevel: null } : user));
+    if (job) addLog('DELETE_JOB', `Deleted job: ${job.label}`);
   };
 
   const addTemplate = (template: Omit<JobTemplate, 'id'>) => {
-    const newTemplate: JobTemplate = {
-      ...template,
-      id: Date.now().toString(),
-    };
+    const newTemplate: JobTemplate = { ...template, id: Date.now().toString() };
     setTemplates((prev) => [...prev, newTemplate]);
     addLog('CREATE_TEMPLATE', `Created template: ${template.name}`);
   };
 
   const updateTemplate = (id: string, templateUpdate: Partial<JobTemplate>) => {
-    setTemplates((prev) =>
-      prev.map((template) => (template.id === id ? { ...template, ...templateUpdate } : template))
-    );
+    setTemplates((prev) => prev.map((t) => (t.id === id ? { ...t, ...templateUpdate } : t)));
     const template = templates.find((t) => t.id === id);
-    if (template) {
-      addLog('UPDATE_TEMPLATE', `Updated template: ${template.name}`);
-    }
+    if (template) addLog('UPDATE_TEMPLATE', `Updated template: ${template.name}`);
   };
 
   const deleteTemplate = (id: string) => {
     const template = templates.find((t) => t.id === id);
-    setTemplates((prev) => prev.filter((template) => template.id !== id));
-    if (template) {
-      addLog('DELETE_TEMPLATE', `Deleted template: ${template.name}`);
-    }
+    setTemplates((prev) => prev.filter((t) => t.id !== id));
+    if (template) addLog('DELETE_TEMPLATE', `Deleted template: ${template.name}`);
   };
 
-  const updateUserJob = (userId: string, jobId: string | null, rankLevel: number | null) => {
+  const updateUserJob = async (userId: string, jobId: string | null, rankLevel: number | null) => {
     const user = users.find((u) => u.id === userId);
-    const job = jobId ? jobs.find((j) => j.id === jobId) : null;
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === userId
-          ? { ...user, jobId, jobLabel: job?.label || 'Unemployed', rankLevel }
-          : user
-      )
-    );
-    if (user) {
-      addLog(
-        'UPDATE_USER_JOB',
-        `Updated ${user.name}'s job to ${job?.label || 'Unemployed'}${rankLevel !== null ? ` (Rank ${rankLevel})` : ''}`
-      );
+    if (!isEnvBrowser) {
+      if (!user) return;
+      const job = jobId ? jobs.find((j) => j.id === jobId) : null;
+      const result = await fetchNui<{ success: boolean; players?: User[] }>('setPlayerJob', {
+        identifier: user.identifier,
+        playerName: user.name,
+        jobName: job?.name || 'unemployed',
+        grade: rankLevel ?? 0,
+      });
+      if (result.success && result.players) {
+        setUsers(result.players);
+        const refreshed = await fetchNui<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('refreshData');
+        if (refreshed.logs) setLogs(refreshed.logs);
+      }
+      return;
     }
+    const job = jobId ? jobs.find((j) => j.id === jobId) : null;
+    setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, jobId, jobLabel: job?.label || 'Unemployed', rankLevel } : u));
+    if (user) addLog('UPDATE_USER_JOB', `Updated ${user.name}'s job to ${job?.label || 'Unemployed'}${rankLevel !== null ? ` (Rank ${rankLevel})` : ''}`);
   };
 
   const updateSettings = (settingsUpdate: Partial<AppSettings>) => {
@@ -290,24 +276,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider
-      value={{
-        jobs,
-        templates,
-        users,
-        logs,
-        settings,
-        addJob,
-        updateJob,
-        deleteJob,
-        addTemplate,
-        updateTemplate,
-        deleteTemplate,
-        updateUserJob,
-        updateSettings,
-        addLog,
-      }}
-    >
+    <AppContext.Provider value={{ jobs, templates, users, logs, settings, addJob, updateJob, deleteJob, addTemplate, updateTemplate, deleteTemplate, updateUserJob, updateSettings, addLog }}>
       {children}
     </AppContext.Provider>
   );
@@ -315,8 +284,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useApp must be used within AppProvider');
-  }
+  if (!context) throw new Error('useApp must be used within AppProvider');
   return context;
 };
