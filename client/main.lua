@@ -10,7 +10,7 @@ local function togglePanel(open)
     })
 end
 
-RegisterCommand(Config.Command, function()
+local function openPanel()
     if isOpen then
         togglePanel(false)
         return
@@ -24,7 +24,13 @@ RegisterCommand(Config.Command, function()
         })
         togglePanel(true)
     end)
+end
+
+RegisterCommand(Config.Command, function()
+    openPanel()
 end, false)
+
+RegisterKeyMapping(Config.Command, 'Open Jobs Panel', 'keyboard', Config.Keybind)
 
 RegisterNUICallback('close', function(_, cb)
     togglePanel(false)
