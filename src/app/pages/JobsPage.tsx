@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import { cn } from '../components/ui/utils';
 
 export const JobsPage = () => {
@@ -15,6 +14,8 @@ export const JobsPage = () => {
   const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set());
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deletingJob, setDeletingJob] = useState<Job | null>(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
 
   const toggleExpand = (id: string) => {
     setExpandedJobs((prev) => {
@@ -26,6 +27,13 @@ export const JobsPage = () => {
 
   const openDialog = (job?: Job) => { setEditingJob(job || null); setIsDialogOpen(true); };
   const closeDialog = () => { setIsDialogOpen(false); setEditingJob(null); };
+  const openDeleteDialog = (job: Job) => { setDeletingJob(job); setDeleteConfirmText(''); };
+  const closeDeleteDialog = () => { setDeletingJob(null); setDeleteConfirmText(''); };
+  const confirmDelete = async () => {
+    if (!deletingJob || deleteConfirmText !== deletingJob.label) return;
+    const ok = await deleteJob(deletingJob.id, deleteConfirmText);
+    if (ok) closeDeleteDialog();
+  };
 
   const totalRanks = jobs.reduce((a, j) => a + j.ranks.length, 0);
 
@@ -87,23 +95,9 @@ export const JobsPage = () => {
                     <button onClick={() => openDialog(job)} className="p-1.5 rounded text-dim hover:text-clean hover:bg-raised transition-colors">
                       <Pencil className="w-4 h-4" />
                     </button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <button className="p-1.5 rounded text-dim hover:text-danger hover:bg-danger/10 transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="text-clean">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete {job.label}?</AlertDialogTitle>
-                          <AlertDialogDescription className="text-subtle">This permanently removes this job and all ranks.</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className="mt-3">
-                          <AlertDialogCancel className="bg-raised border-edge text-soft hover:text-clean rounded-md">Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => deleteJob(job.id)} className="bg-danger hover:bg-danger/90 text-white border-0 rounded-md">Delete</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <button onClick={() => openDeleteDialog(job)} className="p-1.5 rounded text-dim hover:text-danger hover:bg-danger/10 transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               </CardHeader>
@@ -146,6 +140,39 @@ export const JobsPage = () => {
           </div>
         )}
       </div>
+
+      <Dialog open={!!deletingJob} onOpenChange={(o) => !o && closeDeleteDialog()}>
+        <DialogContent className="text-clean">
+          <DialogHeader>
+            <DialogTitle>Delete {deletingJob?.label}?</DialogTitle>
+            <DialogDescription className="text-subtle">
+              This permanently removes the job and all ranks, and resets every player currently in this job to <span className="font-semibold">unemployed</span>. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 mt-2">
+            <Label className="text-xs text-subtle">
+              Type <span className="font-mono text-clean">{deletingJob?.label}</span> to confirm
+            </Label>
+            <Input
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              autoFocus
+              className="bg-raised border-edge text-clean h-9 text-sm rounded-md"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button type="button" variant="ghost" onClick={closeDeleteDialog} className="h-9 px-4 text-sm text-subtle hover:text-clean rounded-md">Cancel</Button>
+            <Button
+              type="button"
+              onClick={confirmDelete}
+              disabled={!deletingJob || deleteConfirmText !== deletingJob.label}
+              className="h-9 px-5 text-sm font-semibold tracking-wide uppercase rounded-md border-0 bg-danger hover:bg-danger/90 text-white disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

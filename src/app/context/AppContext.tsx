@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { toast } from 'sonner';
 import { fetchNui, onNuiEvent, isEnvBrowser } from '../../utils/nui';
 
 export interface Rank {
@@ -57,9 +58,9 @@ interface AppContextType {
   users: User[];
   logs: ActivityLog[];
   settings: AppSettings;
-  addJob: (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateJob: (id: string, job: Partial<Job>) => void;
-  deleteJob: (id: string) => void;
+  addJob: (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => Promise<boolean>;
+  updateJob: (id: string, job: Partial<Job>) => Promise<boolean>;
+  deleteJob: (id: string, confirmLabel: string) => Promise<boolean>;
   addTemplate: (template: Omit<JobTemplate, 'id'>) => void;
   updateTemplate: (id: string, template: Partial<JobTemplate>) => void;
   deleteTemplate: (id: string) => void;
@@ -174,59 +175,74 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setLogs((prev) => [log, ...prev]);
   };
 
-  const addJob = async (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addJob = async (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>): Promise<boolean> => {
     if (!isEnvBrowser) {
-      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('createJob', {
+      const result = await fetchNui<{ success: boolean; jobs?: Job[]; error?: string }>('createJob', {
         name: job.name,
         label: job.label,
         ranks: job.ranks,
       });
       if (result.success && result.jobs) {
         setJobs(result.jobs);
+        toast.success(`Created job: ${job.label}`);
+        return true;
       }
-      return;
+      toast.error(result.error || 'Failed to create job');
+      return false;
     }
     const newJob: Job = { ...job, id: Date.now().toString(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
     setJobs((prev) => [...prev, newJob]);
     addLog('CREATE_JOB', `Created job: ${job.label}`);
+    return true;
   };
 
-  const updateJob = async (id: string, jobUpdate: Partial<Job>) => {
+  const updateJob = async (id: string, jobUpdate: Partial<Job>): Promise<boolean> => {
     if (!isEnvBrowser) {
       const current = jobs.find((j) => j.id === id);
-      if (!current) return;
+      if (!current) return false;
       const merged = { ...current, ...jobUpdate };
-      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('updateJob', {
+      const result = await fetchNui<{ success: boolean; jobs?: Job[]; error?: string }>('updateJob', {
         name: merged.name,
         label: merged.label,
         ranks: merged.ranks,
       });
       if (result.success && result.jobs) {
         setJobs(result.jobs);
+        toast.success(`Updated job: ${merged.label}`);
+        return true;
       }
-      return;
+      toast.error(result.error || 'Failed to update job');
+      return false;
     }
     setJobs((prev) => prev.map((job) => job.id === id ? { ...job, ...jobUpdate, updatedAt: new Date().toISOString() } : job));
     const job = jobs.find((j) => j.id === id);
     if (job) addLog('UPDATE_JOB', `Updated job: ${job.label}`);
+    return true;
   };
 
-  const deleteJob = async (id: string) => {
+  const deleteJob = async (id: string, confirmLabel: string): Promise<boolean> => {
     const job = jobs.find((j) => j.id === id);
     if (!isEnvBrowser) {
-      if (!job) return;
-      const result = await fetchNui<{ success: boolean; jobs?: Job[] }>('deleteJob', { name: job.name });
+      if (!job) return false;
+      const result = await fetchNui<{ success: boolean; jobs?: Job[]; error?: string }>('deleteJob', {
+        name: job.name,
+        confirmLabel,
+      });
       if (result.success && result.jobs) {
         setJobs(result.jobs);
         const refreshed = await fetchNui<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('refreshData');
         if (refreshed.players) setUsers(refreshed.players);
         if (refreshed.logs) setLogs(refreshed.logs);
+        toast.success(`Deleted job: ${job.label}`);
+        return true;
       }
-      return;
+      toast.error(result.error || 'Failed to delete job');
+      return false;
     }
     setJobs((prev) => prev.filter((j) => j.id !== id));
     setUsers((prev) => prev.map((user) => user.jobId === id ? { ...user, jobId: null, jobLabel: 'Unemployed', rankLevel: null } : user));
     if (job) addLog('DELETE_JOB', `Deleted job: ${job.label}`);
+    return true;
   };
 
   const addTemplate = (template: Omit<JobTemplate, 'id'>) => {
@@ -252,7 +268,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     if (!isEnvBrowser) {
       if (!user) return;
       const job = jobId ? jobs.find((j) => j.id === jobId) : null;
-      const result = await fetchNui<{ success: boolean; players?: User[] }>('setPlayerJob', {
+      const result = await fetchNui<{ success: boolean; players?: User[]; error?: string }>('setPlayerJob', {
         identifier: user.identifier,
         playerName: user.name,
         jobName: job?.name || 'unemployed',
@@ -262,6 +278,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setUsers(result.players);
         const refreshed = await fetchNui<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('refreshData');
         if (refreshed.logs) setLogs(refreshed.logs);
+        toast.success(`${user.name} → ${job?.label || 'Unemployed'}`);
+      } else {
+        toast.error(result.error || 'Failed to update player job');
       }
       return;
     }
