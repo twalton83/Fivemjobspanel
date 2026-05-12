@@ -21,7 +21,7 @@ export const Layout = () => {
     <div className="w-[60vw] max-w-[1100px] mx-auto mt-[8vh] flex bg-base text-soft font-sans rounded-xl overflow-hidden shadow-2xl" style={{ height: '75vh' }}>
       {/* Sidebar */}
       <aside className={cn(
-        'h-screen flex flex-col border-r border-edge bg-sidebar transition-[width] duration-300 ease-in-out shrink-0',
+        'h-full flex flex-col border-r border-edge bg-sidebar transition-[width] duration-300 ease-in-out shrink-0',
         collapsed ? 'w-[3.5rem]' : 'w-[14.5rem]'
       )}>
         {/* Brand */}
@@ -108,7 +108,7 @@ export const Layout = () => {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 h-screen overflow-y-auto">
+      <main className="flex-1 h-full overflow-y-auto">
         <div className="max-w-4xl mx-auto px-8 py-8 pb-24">
           <Outlet />
         </div>

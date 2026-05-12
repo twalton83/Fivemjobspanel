@@ -104,8 +104,8 @@ ESX.RegisterServerCallback('jobspanel:createJob', function(source, cb, data)
     MySQL.insert.await('INSERT INTO jobs (name, label) VALUES (?, ?)', { data.name, data.label })
 
     for _, rank in ipairs(data.ranks or {}) do
-        MySQL.insert.await('INSERT INTO job_grades (job_name, grade, name, label, salary) VALUES (?, ?, ?, ?, ?)', {
-            data.name, rank.level, rank.name, rank.name, rank.salary
+        MySQL.insert.await('INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}'
         })
     end
 
@@ -121,8 +121,8 @@ ESX.RegisterServerCallback('jobspanel:updateJob', function(source, cb, data)
     MySQL.query.await('DELETE FROM job_grades WHERE job_name = ?', { data.name })
 
     for _, rank in ipairs(data.ranks or {}) do
-        MySQL.insert.await('INSERT INTO job_grades (job_name, grade, name, label, salary) VALUES (?, ?, ?, ?, ?)', {
-            data.name, rank.level, rank.name, rank.name, rank.salary
+        MySQL.insert.await('INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}'
         })
     end
 
