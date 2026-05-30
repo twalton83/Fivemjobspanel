@@ -9,6 +9,7 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import { cn } from '../components/ui/utils';
+import { SalaryScale } from '../components/SalaryScale';
 
 export const TemplatesPage = () => {
   const { templates, deleteTemplate, settings } = useApp();
@@ -81,7 +82,8 @@ export const TemplatesPage = () => {
                     )}>
                       <div className="flex items-center gap-2.5">
                         <span className="font-mono text-xs text-dim w-4 text-right">{rank.level}</span>
-                        <span className="text-soft">{rank.name}</span>
+                        <span className="text-soft">{rank.label}</span>
+                        <span className="text-xs font-mono text-dim">{rank.name}</span>
                       </div>
                       <span className="font-mono text-sm text-money flex items-center gap-0.5">
                         <DollarSign className="w-3 h-3" />{rank.salary.toLocaleString()}
@@ -112,7 +114,7 @@ const TemplateForm = ({ template, onClose }: { template: JobTemplate | null; onC
   const [name, setName] = useState(template?.name || '');
   const [description, setDescription] = useState(template?.description || '');
   const [ranks, setRanks] = useState<Rank[]>(
-    template?.defaultRanks || [{ id: '1', name: 'Recruit', level: 0, salary: 1000 }]
+    template?.defaultRanks || [{ id: '1', name: 'recruit', label: 'Recruit', level: 0, salary: 1000 }]
   );
 
   const submit = (e: React.FormEvent) => {
@@ -123,7 +125,7 @@ const TemplateForm = ({ template, onClose }: { template: JobTemplate | null; onC
 
   const addRank = () => {
     const lvl = ranks.length > 0 ? Math.max(...ranks.map(r => r.level)) + 1 : 0;
-    setRanks([...ranks, { id: Date.now().toString(), name: `Rank ${lvl}`, level: lvl, salary: 1000 + lvl * 500 }]);
+    setRanks([...ranks, { id: Date.now().toString(), name: `rank_${lvl}`, label: `Rank ${lvl}`, level: lvl, salary: 1000 + lvl * 500 }]);
   };
 
   const patchRank = (id: string, u: Partial<Rank>) => setRanks(ranks.map(r => r.id === id ? { ...r, ...u } : r));
@@ -156,10 +158,18 @@ const TemplateForm = ({ template, onClose }: { template: JobTemplate | null; onC
             </button>
           </div>
           <div className="space-y-1.5 max-h-[16rem] overflow-y-auto">
+            <div className="grid grid-cols-[3.5rem_1fr_1fr_6.5rem_2rem] gap-2 px-3 mb-1">
+              <span className="text-[10px] text-dim text-center">Grade</span>
+              <span className="text-[10px] text-dim">Name (ID)</span>
+              <span className="text-[10px] text-dim">Label</span>
+              <span className="text-[10px] text-dim">Salary</span>
+              <span />
+            </div>
             {ranks.sort((a, b) => a.level - b.level).map(rank => (
-              <div key={rank.id} className="grid grid-cols-[3.5rem_1fr_6.5rem_2rem] gap-2 items-center bg-raised border border-edge rounded-md px-3 py-2.5">
+              <div key={rank.id} className="grid grid-cols-[3.5rem_1fr_1fr_6.5rem_2rem] gap-2 items-center bg-raised border border-edge rounded-md px-3 py-2.5">
                 <Input type="number" value={rank.level} onChange={e => patchRank(rank.id, { level: parseInt(e.target.value) || 0 })} className="bg-base border-edge text-clean h-8 text-sm font-mono text-center rounded p-0" />
-                <Input value={rank.name} onChange={e => patchRank(rank.id, { name: e.target.value })} className="bg-base border-edge text-clean h-8 text-sm rounded px-2" />
+                <Input value={rank.name} onChange={e => patchRank(rank.id, { name: e.target.value })} placeholder="officer" className="bg-base border-edge text-clean h-8 text-sm font-mono rounded px-2 placeholder:text-dim" />
+                <Input value={rank.label} onChange={e => patchRank(rank.id, { label: e.target.value })} placeholder="Officer" className="bg-base border-edge text-clean h-8 text-sm rounded px-2 placeholder:text-dim" />
                 <Input type="number" value={rank.salary} onChange={e => patchRank(rank.id, { salary: parseInt(e.target.value) || 0 })} className="bg-base border-edge text-money h-8 text-sm font-mono rounded px-2" />
                 <button type="button" onClick={() => removeRank(rank.id)} disabled={ranks.length === 1} className="text-dim hover:text-danger disabled:opacity-30 transition-colors flex items-center justify-center">
                   <Trash2 className="w-3.5 h-3.5" />
@@ -167,6 +177,8 @@ const TemplateForm = ({ template, onClose }: { template: JobTemplate | null; onC
               </div>
             ))}
           </div>
+
+          <SalaryScale ranks={ranks} onApply={setRanks} accentColor={settings.accentColor} />
         </div>
 
         <div className="flex justify-end gap-2 pt-3 border-t border-edge">

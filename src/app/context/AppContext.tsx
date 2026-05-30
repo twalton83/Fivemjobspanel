@@ -5,6 +5,7 @@ import { fetchNui, onNuiEvent, isEnvBrowser } from '../../utils/nui';
 export interface Rank {
   id: string;
   name: string;
+  label: string;
   level: number;
   salary: number;
 }
@@ -86,22 +87,22 @@ const devJobs: Job[] = [
   {
     id: '1', name: 'police', label: 'Los Santos Police Department', description: 'Law enforcement agency',
     ranks: [
-      { id: '1-1', name: 'Cadet', level: 0, salary: 1200 },
-      { id: '1-2', name: 'Officer', level: 1, salary: 1800 },
-      { id: '1-3', name: 'Sergeant', level: 2, salary: 2400 },
-      { id: '1-4', name: 'Lieutenant', level: 3, salary: 3000 },
-      { id: '1-5', name: 'Captain', level: 4, salary: 3800 },
-      { id: '1-6', name: 'Chief', level: 5, salary: 4500 },
+      { id: '1-1', name: 'cadet', label: 'Cadet', level: 0, salary: 1200 },
+      { id: '1-2', name: 'officer', label: 'Officer', level: 1, salary: 1800 },
+      { id: '1-3', name: 'sergeant', label: 'Sergeant', level: 2, salary: 2400 },
+      { id: '1-4', name: 'lieutenant', label: 'Lieutenant', level: 3, salary: 3000 },
+      { id: '1-5', name: 'captain', label: 'Captain', level: 4, salary: 3800 },
+      { id: '1-6', name: 'chief', label: 'Chief', level: 5, salary: 4500 },
     ],
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   },
   {
     id: '2', name: 'mechanic', label: 'Mechanic Shop', description: 'Vehicle repair and maintenance',
     ranks: [
-      { id: '2-1', name: 'Apprentice', level: 0, salary: 800 },
-      { id: '2-2', name: 'Mechanic', level: 1, salary: 1400 },
-      { id: '2-3', name: 'Lead Mechanic', level: 2, salary: 2000 },
-      { id: '2-4', name: 'Shop Manager', level: 3, salary: 2600 },
+      { id: '2-1', name: 'apprentice', label: 'Apprentice', level: 0, salary: 800 },
+      { id: '2-2', name: 'mechanic', label: 'Mechanic', level: 1, salary: 1400 },
+      { id: '2-3', name: 'lead_mechanic', label: 'Lead Mechanic', level: 2, salary: 2000 },
+      { id: '2-4', name: 'shop_manager', label: 'Shop Manager', level: 3, salary: 2600 },
     ],
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   },
@@ -111,20 +112,20 @@ const devTemplates: JobTemplate[] = [
   {
     id: '1', name: 'Emergency Services', description: 'Template for emergency service jobs',
     defaultRanks: [
-      { id: 't1-1', name: 'Trainee', level: 0, salary: 1000 },
-      { id: 't1-2', name: 'Responder', level: 1, salary: 1600 },
-      { id: 't1-3', name: 'Senior Responder', level: 2, salary: 2200 },
-      { id: 't1-4', name: 'Supervisor', level: 3, salary: 2800 },
-      { id: 't1-5', name: 'Chief', level: 4, salary: 3500 },
+      { id: 't1-1', name: 'trainee', label: 'Trainee', level: 0, salary: 1000 },
+      { id: 't1-2', name: 'responder', label: 'Responder', level: 1, salary: 1600 },
+      { id: 't1-3', name: 'senior_responder', label: 'Senior Responder', level: 2, salary: 2200 },
+      { id: 't1-4', name: 'supervisor', label: 'Supervisor', level: 3, salary: 2800 },
+      { id: 't1-5', name: 'chief', label: 'Chief', level: 4, salary: 3500 },
     ],
   },
   {
     id: '2', name: 'Business', description: 'Template for business jobs',
     defaultRanks: [
-      { id: 't2-1', name: 'Employee', level: 0, salary: 900 },
-      { id: 't2-2', name: 'Senior Employee', level: 1, salary: 1500 },
-      { id: 't2-3', name: 'Manager', level: 2, salary: 2200 },
-      { id: 't2-4', name: 'Director', level: 3, salary: 3000 },
+      { id: 't2-1', name: 'employee', label: 'Employee', level: 0, salary: 900 },
+      { id: 't2-2', name: 'senior_employee', label: 'Senior Employee', level: 1, salary: 1500 },
+      { id: 't2-3', name: 'manager', label: 'Manager', level: 2, salary: 2200 },
+      { id: 't2-4', name: 'director', label: 'Director', level: 3, salary: 3000 },
     ],
   },
 ];

@@ -34,6 +34,7 @@ end
 local function validRank(r)
     return type(r) == 'table'
         and validLabel(r.name, MAX_NAME_LEN)
+        and validLabel(r.label, MAX_LABEL_LEN)
         and validInt(r.level, 0, MAX_GRADE)
         and validInt(r.salary, 0, MAX_SALARY)
 end
@@ -134,7 +135,8 @@ local function getFormattedJobs()
             if grade.job_name == job.name then
                 table.insert(jobGrades, {
                     id = grade.job_name .. '_' .. grade.grade,
-                    name = grade.label,
+                    name = grade.name,
+                    label = grade.label,
                     level = grade.grade,
                     salary = grade.salary
                 })
@@ -220,7 +222,7 @@ ESX.RegisterServerCallback('jobspanel:createJob', function(source, cb, data)
     for _, rank in ipairs(data.ranks) do
         queries[#queries + 1] = {
             'INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            { data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}' }
+            { data.name, rank.level, rank.name, rank.label, rank.salary, '{}', '{}' }
         }
     end
 
@@ -257,7 +259,7 @@ ESX.RegisterServerCallback('jobspanel:updateJob', function(source, cb, data)
     for _, rank in ipairs(data.ranks) do
         queries[#queries + 1] = {
             'INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            { data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}' }
+            { data.name, rank.level, rank.name, rank.label, rank.salary, '{}', '{}' }
         }
     end
 
