@@ -58,6 +58,8 @@ interface AppContextType {
   users: User[];
   logs: ActivityLog[];
   settings: AppSettings;
+  refreshing: boolean;
+  refreshData: () => Promise<void>;
   addJob: (job: Omit<Job, 'id' | 'createdAt' | 'updatedAt'>) => Promise<boolean>;
   updateJob: (id: string, job: Partial<Job>) => Promise<boolean>;
   deleteJob: (id: string, confirmLabel: string) => Promise<boolean>;
@@ -146,6 +148,23 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const saved = localStorage.getItem('fivem-settings');
     return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
   });
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refreshData = async () => {
+    if (isEnvBrowser) return;
+    setRefreshing(true);
+    try {
+      const data = await fetchNui<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('refreshData');
+      if (data.jobs) setJobs(data.jobs);
+      if (data.players) setUsers(data.players);
+      if (data.logs) setLogs(data.logs);
+      toast.success('Data refreshed from database');
+    } catch {
+      toast.error('Failed to refresh data');
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     return onNuiEvent<{ jobs: Job[]; players: User[]; logs: ActivityLog[] }>('loadData', (data) => {
@@ -295,7 +314,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ jobs, templates, users, logs, settings, addJob, updateJob, deleteJob, addTemplate, updateTemplate, deleteTemplate, updateUserJob, updateSettings, addLog }}>
+    <AppContext.Provider value={{ jobs, templates, users, logs, settings, refreshing, refreshData, addJob, updateJob, deleteJob, addTemplate, updateTemplate, deleteTemplate, updateUserJob, updateSettings, addLog }}>
       {children}
     </AppContext.Provider>
   );
