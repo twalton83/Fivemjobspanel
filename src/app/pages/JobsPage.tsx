@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Pencil, Trash2, ChevronDown, ChevronRight, DollarSign } from 'lucide-react';
+import { Plus, Pencil, Trash2, ChevronDown, ChevronRight, DollarSign, RefreshCw } from 'lucide-react';
 import { useApp, Job, Rank } from '../context/AppContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader } from '../components/ui/card';
@@ -10,7 +10,7 @@ import { Textarea } from '../components/ui/textarea';
 import { cn } from '../components/ui/utils';
 
 export const JobsPage = () => {
-  const { jobs, addJob, updateJob, deleteJob, settings } = useApp();
+  const { jobs, addJob, updateJob, deleteJob, settings, refreshData, refreshing } = useApp();
   const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set());
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -45,7 +45,17 @@ export const JobsPage = () => {
           <h1 className="text-clean">Jobs</h1>
           <p className="text-sm text-subtle mt-1">Manage career paths, ranks, and salaries</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={refreshData}
+            disabled={refreshing}
+            variant="ghost"
+            className="h-9 w-9 p-0 text-subtle hover:text-clean rounded-md"
+            title="Refresh from database"
+          >
+            <RefreshCw className={cn("w-4 h-4", refreshing && "animate-spin")} />
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => openDialog()} className="h-9 px-4 text-sm font-semibold tracking-wide uppercase rounded-md border-0" style={{ backgroundColor: settings.primaryColor, color: '#FFFFFF' }}>
               <Plus className="w-4 h-4 mr-1.5" /> New Job
@@ -55,6 +65,7 @@ export const JobsPage = () => {
             <JobForm job={editingJob} onClose={closeDialog} />
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Quick stats */}
