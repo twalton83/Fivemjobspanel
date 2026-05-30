@@ -32,10 +32,13 @@ local function validInt(n, lo, hi)
 end
 
 local function validRank(r)
-    return type(r) == 'table'
-        and validLabel(r.name, MAX_NAME_LEN)
-        and validInt(r.level, 0, MAX_GRADE)
-        and validInt(r.salary, 0, MAX_SALARY)
+    if type(r) ~= 'table' then return false end
+    if not validLabel(r.name, MAX_NAME_LEN) then return false end
+    -- label is optional; falls back to name when writing to DB
+    if r.label ~= nil and not validLabel(r.label, MAX_LABEL_LEN) then return false end
+    if not validInt(r.level, 0, MAX_GRADE) then return false end
+    if not validInt(r.salary, 0, MAX_SALARY) then return false end
+    return true
 end
 
 local function validRanks(ranks)
@@ -132,11 +135,14 @@ local function getFormattedJobs()
         local jobGrades = {}
         for _, grade in ipairs(grades) do
             if grade.job_name == job.name then
+                local gradeName  = grade.name  or grade.label or ('grade_' .. grade.grade)
+                local gradeLabel = grade.label or grade.name  or ('Grade ' .. grade.grade)
                 table.insert(jobGrades, {
                     id = grade.job_name .. '_' .. grade.grade,
-                    name = grade.label,
+                    name = gradeName,
+                    label = gradeLabel,
                     level = grade.grade,
-                    salary = grade.salary
+                    salary = grade.salary or 0
                 })
             end
         end
@@ -218,9 +224,10 @@ ESX.RegisterServerCallback('jobspanel:createJob', function(source, cb, data)
 
     local queries = { { 'INSERT INTO jobs (name, label) VALUES (?, ?)', { data.name, data.label } } }
     for _, rank in ipairs(data.ranks) do
+        local rLabel = rank.label or rank.name
         queries[#queries + 1] = {
             'INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            { data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}' }
+            { data.name, rank.level, rank.name, rLabel, rank.salary, '{}', '{}' }
         }
     end
 
@@ -255,9 +262,10 @@ ESX.RegisterServerCallback('jobspanel:updateJob', function(source, cb, data)
         { 'DELETE FROM job_grades WHERE job_name = ?', { data.name } },
     }
     for _, rank in ipairs(data.ranks) do
+        local rLabel = rank.label or rank.name
         queries[#queries + 1] = {
             'INSERT INTO job_grades (job_name, grade, name, label, salary, skin_male, skin_female) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            { data.name, rank.level, rank.name, rank.name, rank.salary, '{}', '{}' }
+            { data.name, rank.level, rank.name, rLabel, rank.salary, '{}', '{}' }
         }
     end
 
